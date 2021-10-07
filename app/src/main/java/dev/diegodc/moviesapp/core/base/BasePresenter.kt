@@ -15,6 +15,8 @@ open class BasePresenter<V: IView> : IPresenter<V>{
         mView = null
     }
 
+
+
     override fun handleError(error: Exception) {
         mView?.hideLoading()
         Log.e("BasePresenter", error.javaClass.name)

@@ -6,6 +6,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.FragmentComponent
+import dev.diegodc.moviesapp.features.dashboard.DashboardFragment
+import dev.diegodc.moviesapp.features.dashboard.DashboardPresenter
+import dev.diegodc.moviesapp.features.dashboard.contract.IDashboardContract
 import dev.diegodc.moviesapp.features.dashboard.screens.latest.LatestMoviesFragment
 import dev.diegodc.moviesapp.features.dashboard.screens.latest.LatestMoviesPresenter
 import dev.diegodc.moviesapp.features.dashboard.screens.latest.presenter.ILatestMoviesContract
@@ -34,6 +37,11 @@ abstract class DashboardModule {
         fun provideFragmentUpcomingMovies(
             fragment: Fragment
         ) : IUpcomingMoviesContract.IUpcomingMoviesView = fragment as UpcomingMoviesFragment
+
+        @Provides
+        fun provideDashboardFragment(
+            fragment: Fragment
+        ) : IDashboardContract.IDashboardView = fragment as DashboardFragment
     }
 
     @Binds
@@ -50,5 +58,10 @@ abstract class DashboardModule {
     abstract fun provideUpcomingMoviesPresenter(
         presenter: UpcomingMoviesPresenter<IUpcomingMoviesContract.IUpcomingMoviesView>
     ): IUpcomingMoviesContract.IUpcomingMoviesPresenter<IUpcomingMoviesContract.IUpcomingMoviesView>
+
+    @Binds
+    abstract fun provideDashboardPresenter(
+        presenter: DashboardPresenter<IDashboardContract.IDashboardView>
+    ): IDashboardContract.IDashboardPresenter<IDashboardContract.IDashboardView>
 
 }

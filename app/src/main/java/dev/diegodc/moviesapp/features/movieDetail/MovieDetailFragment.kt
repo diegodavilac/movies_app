@@ -5,25 +5,24 @@ import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
 import dev.diegodc.moviesapp.R
 import dev.diegodc.moviesapp.core.base.BaseFragment
-import dev.diegodc.moviesapp.features.movieDetail.contract.IMovieDetailContract
+import dev.diegodc.moviesapp.features.movieDetail.contract.IMovieDetailContract.IMovieDetailPresenter
+import dev.diegodc.moviesapp.features.movieDetail.contract.IMovieDetailContract.IMovieDetailView
 import dev.diegodc.moviesapp.features.movieDetail.model.MovieDetailedView
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class MovieDetailFragment() : BaseFragment(R.layout.fragment_movie_detail), IMovieDetailContract.IMovieDetailView {
+class MovieDetailFragment() :
+    BaseFragment<IMovieDetailView, IMovieDetailPresenter<IMovieDetailView>>(R.layout.fragment_movie_detail),
+    IMovieDetailView {
 
     companion object {
         const val MOVIE_ID_ARG = "movie_id"
     }
 
-    @Inject lateinit var presenterI: IMovieDetailContract.IMovieDetailPresenter<IMovieDetailContract.IMovieDetailView>
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenterI.onAttach(this)
         arguments?.let { bundle ->
             bundle.getLong(MOVIE_ID_ARG).let {
-                presenterI.loadMovieDetails(it)
+                presenter.loadMovieDetails(it)
             }
         }
     }

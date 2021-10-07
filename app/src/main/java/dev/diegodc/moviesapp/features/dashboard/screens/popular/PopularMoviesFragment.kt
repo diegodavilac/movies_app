@@ -9,21 +9,17 @@ import dev.diegodc.moviesapp.R
 import dev.diegodc.moviesapp.core.base.BaseFragment
 import dev.diegodc.moviesapp.features.dashboard.adapter.MoviesAdapter
 import dev.diegodc.moviesapp.features.dashboard.models.MovieView
-import dev.diegodc.moviesapp.features.dashboard.screens.popular.presenter.IPopularMoviesContract
+import dev.diegodc.moviesapp.features.dashboard.screens.popular.presenter.IPopularMoviesContract.IPopularMoviesPresenter
+import dev.diegodc.moviesapp.features.dashboard.screens.popular.presenter.IPopularMoviesContract.IPopularMoviesView
 import dev.diegodc.moviesapp.features.movieDetail.MovieDetailFragment
 import kotlinx.android.synthetic.main.fragment_movies_listed.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class PopularMoviesFragment : BaseFragment(R.layout.fragment_movies_listed),
-    IPopularMoviesContract.IPopularMoviesView {
-
-    @Inject
-    lateinit var presenter: IPopularMoviesContract.IPopularMoviesPresenter<IPopularMoviesContract.IPopularMoviesView>
+class PopularMoviesFragment : BaseFragment<IPopularMoviesView, IPopularMoviesPresenter<IPopularMoviesView>>(R.layout.fragment_movies_listed),
+    IPopularMoviesView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.onAttach(this)
         if (isVisible) presenter.loadMovies()
     }
 

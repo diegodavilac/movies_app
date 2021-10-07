@@ -9,21 +9,18 @@ import dev.diegodc.moviesapp.R
 import dev.diegodc.moviesapp.core.base.BaseFragment
 import dev.diegodc.moviesapp.features.dashboard.adapter.MoviesAdapter
 import dev.diegodc.moviesapp.features.dashboard.models.MovieView
-import dev.diegodc.moviesapp.features.dashboard.screens.upcoming.presenter.IUpcomingMoviesContract
+import dev.diegodc.moviesapp.features.dashboard.screens.upcoming.presenter.IUpcomingMoviesContract.IUpcomingMoviesPresenter
+import dev.diegodc.moviesapp.features.dashboard.screens.upcoming.presenter.IUpcomingMoviesContract.IUpcomingMoviesView
 import dev.diegodc.moviesapp.features.movieDetail.MovieDetailFragment
 import kotlinx.android.synthetic.main.fragment_movies_listed.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class UpcomingMoviesFragment : BaseFragment(R.layout.fragment_movies_listed),
-    IUpcomingMoviesContract.IUpcomingMoviesView {
-
-    @Inject
-    lateinit var presenter: IUpcomingMoviesContract.IUpcomingMoviesPresenter<IUpcomingMoviesContract.IUpcomingMoviesView>
+class UpcomingMoviesFragment : BaseFragment<IUpcomingMoviesView, IUpcomingMoviesPresenter<IUpcomingMoviesView>>(R.layout.fragment_movies_listed),
+    IUpcomingMoviesView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.onAttach(this)
         if (isVisible) presenter.loadMovies()
     }
 

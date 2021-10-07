@@ -1,26 +1,19 @@
 package dev.diegodc.moviesapp.features.dashboard
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import dagger.hilt.android.AndroidEntryPoint
 import dev.diegodc.moviesapp.R
+import dev.diegodc.moviesapp.core.base.BaseFragment
 import dev.diegodc.moviesapp.features.dashboard.screens.latest.LatestMoviesFragment
 import dev.diegodc.moviesapp.features.dashboard.screens.popular.PopularMoviesFragment
 import dev.diegodc.moviesapp.features.dashboard.screens.upcoming.UpcomingMoviesFragment
+import dev.diegodc.moviesapp.features.dashboard.contract.IDashboardContract.IDashboardPresenter
+import dev.diegodc.moviesapp.features.dashboard.contract.IDashboardContract.IDashboardView
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 @AndroidEntryPoint
-class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initFragments()
-        initBottomNav()
-    }
+class DashboardFragment : BaseFragment<IDashboardView, IDashboardPresenter<IDashboardView>>(R.layout.fragment_dashboard), IDashboardView {
 
     private fun initBottomNav() {
         bottomNav_movies.setOnItemSelectedListener { item ->
@@ -91,6 +84,14 @@ class DashboardFragment : Fragment(R.layout.fragment_dashboard) {
                 "fragment_latest_movies"
             ).commit()
         }
+    }
 
+    override fun initViews() {
+        (presenter as DashboardPresenter).initContent()
+        initBottomNav()
+    }
+
+    override fun initContent() {
+        initFragments()
     }
 }

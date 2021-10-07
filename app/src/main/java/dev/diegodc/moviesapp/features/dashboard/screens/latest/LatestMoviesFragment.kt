@@ -9,17 +9,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.diegodc.moviesapp.R
 import dev.diegodc.moviesapp.core.base.BaseFragment
 import dev.diegodc.moviesapp.features.dashboard.models.MovieView
-import dev.diegodc.moviesapp.features.dashboard.screens.latest.presenter.ILatestMoviesContract
+import dev.diegodc.moviesapp.features.dashboard.screens.latest.presenter.ILatestMoviesContract.ILatestMoviesView
+import dev.diegodc.moviesapp.features.dashboard.screens.latest.presenter.ILatestMoviesContract.ILatestMoviesPresenter
 import dev.diegodc.moviesapp.features.movieDetail.MovieDetailFragment
 import kotlinx.android.synthetic.main.fragment_lasted_movie.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class LatestMoviesFragment : BaseFragment(R.layout.fragment_lasted_movie),
-    ILatestMoviesContract.ILatestMoviesView {
-
-    @Inject
-    lateinit var presenter: ILatestMoviesContract.ILatestMoviesPresenter<ILatestMoviesContract.ILatestMoviesView>
+class LatestMoviesFragment :
+    BaseFragment<ILatestMoviesView, ILatestMoviesPresenter<ILatestMoviesView>>(R.layout.fragment_lasted_movie),
+    ILatestMoviesView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
