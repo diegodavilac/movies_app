@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottom_nav_graph"
+    app:startDestination="@id/menu_item_dashboard_latest">
+
+    <fragment
+        android:id="@+id/menu_item_dashboard_latest"
+        android:name="dev.diegodc.moviesapp.features.dashboard.screens.latest.LatestMoviesFragment"
+        android:label="fragment_latest_movies"
+        tools:layout="@layout/fragment_movies_listed" />
+
+    <fragment
+        android:id="@+id/menu_item_dashboard_popular"
+        android:name="dev.diegodc.moviesapp.features.dashboard.screens.latest.LatestMoviesFragment"
+        android:label="fragment_popular_movies"
+        tools:layout="@layout/fragment_movies_listed" />
+
+    <fragment
+        android:id="@+id/menu_item_dashboard_upcoming"
+        android:name="dev.diegodc.moviesapp.features.dashboard.screens.latest.LatestMoviesFragment"
+        android:label="fragment_upcoming_movies"
+        tools:layout="@layout/fragment_movies_listed" />
+</navigation>

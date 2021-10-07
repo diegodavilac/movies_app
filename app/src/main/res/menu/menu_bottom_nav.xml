@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_item_dashboard_latest"
+        android:title="@string/dashboard_latest" />
+
+    <item
+        android:id="@+id/menu_item_dashboard_popular"
+        android:title="@string/dashboard_popular" />
+
+    <item
+        android:id="@+id/menu_item_dashboard_upcoming"
+        android:title="@string/dashboard_upcoming" />
+</menu>
