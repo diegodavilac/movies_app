@@ -1,6 +1,8 @@
 package dev.diegodc.moviesapp.core.base
 
-interface IView {
+import kotlinx.coroutines.CoroutineScope
+
+interface IView : CoroutineScope{
     fun showLoading()
     fun hideLoading()
     fun isNetworkConnected() : Boolean

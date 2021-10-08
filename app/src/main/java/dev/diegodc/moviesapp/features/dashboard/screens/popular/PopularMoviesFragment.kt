@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagingData
 import dagger.hilt.android.AndroidEntryPoint
 import dev.diegodc.moviesapp.R
 import dev.diegodc.moviesapp.core.base.BaseFragment
@@ -13,6 +14,8 @@ import dev.diegodc.moviesapp.features.dashboard.screens.popular.presenter.IPopul
 import dev.diegodc.moviesapp.features.dashboard.screens.popular.presenter.IPopularMoviesContract.IPopularMoviesView
 import dev.diegodc.moviesapp.features.movieDetail.MovieDetailFragment
 import kotlinx.android.synthetic.main.fragment_movies_listed.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PopularMoviesFragment : BaseFragment<IPopularMoviesView, IPopularMoviesPresenter<IPopularMoviesView>>(R.layout.fragment_movies_listed),
@@ -27,8 +30,7 @@ class PopularMoviesFragment : BaseFragment<IPopularMoviesView, IPopularMoviesPre
         super.onHiddenChanged(hidden)
         //Load movies when it is visible
         if (!hidden) {
-            if ((recyclerView_movies.adapter as MoviesAdapter).data.isEmpty())
-                presenter.loadMovies()
+            presenter.loadMovies()
         }
     }
 
@@ -44,11 +46,12 @@ class PopularMoviesFragment : BaseFragment<IPopularMoviesView, IPopularMoviesPre
         }
     }
 
-    override fun onMoviesLoaded(movies: List<MovieView>) {
+    override fun onMoviesLoaded(movies: PagingData<MovieView>) {
         Log.d("MoviesApp", "onMoviesLoaded")
         (recyclerView_movies.adapter as? MoviesAdapter)?.apply {
-            data.addAll(movies)
-            notifyDataSetChanged()
+            launch {
+                submitData(movies)
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-package dev.diegodc.moviesapp.features.dashboard.screens.upcoming.presenter
+package dev.diegodc.moviesapp.features.dashboard.screens.popular.presenter
 
 import androidx.paging.PagingData
 import dev.diegodc.moviesapp.core.base.BasePresenter
@@ -10,10 +10,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
-interface IUpcomingMoviesContract {
-    abstract class IUpcomingMoviesPresenter<V : IUpcomingMoviesView> : BasePresenter<V>(), CoroutineScope {
-        abstract fun loadMovies()
-
+interface IPopularMoviesContract {
+    abstract class IPopularMoviesPresenter<V : IPopularMoviesView> : BasePresenter<V>(), CoroutineScope{
         private val job = Job()
         override val coroutineContext: CoroutineContext = job + Dispatchers.IO
 
@@ -21,8 +19,10 @@ interface IUpcomingMoviesContract {
             job.cancel()
             super.onDetach()
         }
+
+        abstract fun loadMovies()
     }
-    interface IUpcomingMoviesView : IView{
+    interface IPopularMoviesView : IView{
         fun onMoviesLoaded(movies: PagingData<MovieView>)
     }
 }

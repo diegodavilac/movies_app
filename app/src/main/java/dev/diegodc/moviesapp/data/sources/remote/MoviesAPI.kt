@@ -1,7 +1,6 @@
 package dev.diegodc.moviesapp.data.sources.remote
 
 import dev.diegodc.moviesapp.data.model.Movie
-import dev.diegodc.moviesapp.data.model.MovieDetails
 import dev.diegodc.moviesapp.data.model.MoviesResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -10,7 +9,7 @@ import retrofit2.http.Query
 interface MoviesAPI {
 
     @GET("movie/{movie_id}")
-    suspend fun getMovieDetail(@Path("movie_id") id : Long) : MovieDetails
+    suspend fun getMovieDetail(@Path("movie_id") id : Long) : Movie
 
     @GET("movie/latest")
     suspend fun getLatestMovies() : Movie

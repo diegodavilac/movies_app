@@ -6,6 +6,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.FragmentComponent
+import dev.diegodc.moviesapp.data.repository.IMoviesRepository
+import dev.diegodc.moviesapp.data.repository.MoviesRepository
 import dev.diegodc.moviesapp.features.dashboard.DashboardFragment
 import dev.diegodc.moviesapp.features.dashboard.DashboardPresenter
 import dev.diegodc.moviesapp.features.dashboard.contract.IDashboardContract
@@ -42,22 +44,26 @@ abstract class DashboardModule {
         fun provideDashboardFragment(
             fragment: Fragment
         ) : IDashboardContract.IDashboardView = fragment as DashboardFragment
+
+        @Provides
+        fun providePopularMoviesPresenter(
+            repository: IMoviesRepository
+        ): IPopularMoviesContract.IPopularMoviesPresenter<IPopularMoviesContract.IPopularMoviesView>{
+            return PopularMoviesPresenter<IPopularMoviesContract.IPopularMoviesView>(repository)
+        }
+
+        @Provides
+        fun provideUpcomingMoviesPresenter(
+            repository: IMoviesRepository
+        ): IUpcomingMoviesContract.IUpcomingMoviesPresenter<IUpcomingMoviesContract.IUpcomingMoviesView>{
+            return UpcomingMoviesPresenter<IUpcomingMoviesContract.IUpcomingMoviesView>(repository)
+        }
     }
 
     @Binds
     abstract fun provideLatestMoviesPresenter(
         presenter: LatestMoviesPresenter<ILatestMoviesContract.ILatestMoviesView>
     ): ILatestMoviesContract.ILatestMoviesPresenter<ILatestMoviesContract.ILatestMoviesView>
-
-    @Binds
-    abstract fun providePopularMoviesPresenter(
-        presenter: PopularMoviesPresenter<IPopularMoviesContract.IPopularMoviesView>
-    ): IPopularMoviesContract.IPopularMoviesPresenter<IPopularMoviesContract.IPopularMoviesView>
-
-    @Binds
-    abstract fun provideUpcomingMoviesPresenter(
-        presenter: UpcomingMoviesPresenter<IUpcomingMoviesContract.IUpcomingMoviesView>
-    ): IUpcomingMoviesContract.IUpcomingMoviesPresenter<IUpcomingMoviesContract.IUpcomingMoviesView>
 
     @Binds
     abstract fun provideDashboardPresenter(

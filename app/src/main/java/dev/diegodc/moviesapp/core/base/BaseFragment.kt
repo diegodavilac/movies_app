@@ -7,9 +7,15 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import dev.diegodc.moviesapp.core.ui.hideLoadingDialog
 import dev.diegodc.moviesapp.core.ui.showLoadingDialog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 abstract class BaseFragment<V: IView, P: IPresenter<V>>(@LayoutRes view : Int) : Fragment(view), IView{
+
+    private val job = Job()
+    override val coroutineContext: CoroutineContext = job + Dispatchers.Main
 
     abstract fun initViews()
 
@@ -24,6 +30,7 @@ abstract class BaseFragment<V: IView, P: IPresenter<V>>(@LayoutRes view : Int) :
 
     override fun onDestroyView() {
         presenter.onDetach()
+        job.cancel()
         super.onDestroyView()
     }
 
