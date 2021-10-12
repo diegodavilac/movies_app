@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.*
 import java.lang.Exception
 
 inline fun <ResultType, RequestType> networkBoundResource(
-    crossinline query: suspend () -> Flow<ResultType>,
+    crossinline query: () -> Flow<ResultType>,
     crossinline fetch: suspend () -> RequestType,
     crossinline saveFetchResult: suspend (RequestType) -> Unit,
     crossinline shouldFetch: (ResultType) -> Boolean = { true }

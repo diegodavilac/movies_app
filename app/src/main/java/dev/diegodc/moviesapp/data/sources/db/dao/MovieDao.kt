@@ -17,6 +17,12 @@ interface MovieDao {
     @Query("SELECT * from movie ORDER BY popularity DESC LIMIT :pageSize")
     fun getPopularMovies(pageSize: Int) : PagingSource<Int, MovieDB>
 
+    @Query("SELECT * from movie  ORDER BY release_date DESC LIMIT :pageSize OFFSET ((:page - 1) * :pageSize)")
+    fun getUpcomingMovies(page:Int, pageSize: Int) : Flow<List<MovieDB>>
+
+    @Query("SELECT * from movie ORDER BY popularity DESC LIMIT :pageSize OFFSET ((:page - 1) * :pageSize)")
+    fun getPopularMovies(page: Int, pageSize: Int) : Flow<List<MovieDB>>
+
     @Query("SELECT * from movie  WHERE created_at != 0  ORDER BY created_at LIMIT 1")
     fun getLatestMovie(): MovieDB?
 

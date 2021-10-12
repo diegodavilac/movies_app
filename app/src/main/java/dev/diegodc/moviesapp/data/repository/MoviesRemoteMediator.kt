@@ -61,7 +61,7 @@ class MoviesRemoteMediator(
             val prevKey = if (page == MoviesRepository.STARTED_PAGE) null else page - 1
             val nextKey = if (response.isNextPageAvailable) page +1  else null
             val keys = response.results.map {
-                RemoteKey(it.id, prevKey = prevKey, nextKey = nextKey)
+                RemoteKey(it.id, prevKey = prevKey, nextKey = nextKey, type = 1)
             }
             remoteKeyDao.insertAll(keys)
             saveMovies.invoke(response.results)
@@ -103,25 +103,28 @@ class MoviesRemoteMediator(
     }
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(state: PagingState<Int, MovieDB>): RemoteKey? {
-        return state.anchorPosition?.let { position ->
-            state.closestItemToPosition(position)?.id?.let { repoId ->
-                remoteKeyDao.remoteKeysCatId(repoId)
-            }
-        }
+//        return state.anchorPosition?.let { position ->
+//            state.closestItemToPosition(position)?.id?.let { repoId ->
+//                remoteKeyDao.remoteKeysCatId(repoId)
+//            }
+//        }
+        return null
     }
 
     private suspend fun getLastRemoteKey(state: PagingState<Int, MovieDB>): RemoteKey? {
-        return state.pages
-            .lastOrNull { it.data.isNotEmpty() }
-            ?.data?.lastOrNull()
-            ?.let { movie -> remoteKeyDao.remoteKeysCatId(movie.id) }
+//        return state.pages
+//            .lastOrNull { it.data.isNotEmpty() }
+//            ?.data?.lastOrNull()
+//            ?.let { movie -> remoteKeyDao.remoteKeysCatId(movie.id) }
+        return null
     }
 
     private suspend fun getFirstRemoteKey(state: PagingState<Int, MovieDB>): RemoteKey? {
-        return state.pages
-            .firstOrNull { it.data.isNotEmpty() }
-            ?.data?.firstOrNull()
-            ?.let { movie -> remoteKeyDao.remoteKeysCatId(movie.id) }
+//        return state.pages
+//            .firstOrNull { it.data.isNotEmpty() }
+//            ?.data?.firstOrNull()
+//            ?.let { movie -> remoteKeyDao.remoteKeysCatId(movie.id) }
+        return null
     }
 
 }

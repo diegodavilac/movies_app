@@ -10,18 +10,17 @@ import dagger.hilt.components.SingletonComponent
 import dev.diegodc.moviesapp.BuildConfig
 import dev.diegodc.moviesapp.core.util.NetworkUtil
 import dev.diegodc.moviesapp.data.repository.MoviesRepository
-import dev.diegodc.moviesapp.data.sources.MoviesDataSource
 import dev.diegodc.moviesapp.data.sources.db.MovieDatabase
+import dev.diegodc.moviesapp.data.sources.db.dao.LatestMovieDao
 import dev.diegodc.moviesapp.data.sources.db.dao.MovieDao
 import dev.diegodc.moviesapp.data.sources.remote.MoviesAPI
 import dev.diegodc.moviesapp.data.sources.remote.util.AuthInterceptor
-import dev.diegodc.moviesapp.data.repository.IMoviesRepository
+import dev.diegodc.moviesapp.domain.repository.IMoviesRepository
 import dev.diegodc.moviesapp.data.sources.db.dao.RemoteKeyDao
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -36,13 +35,15 @@ class RepositoryModule {
         api: MoviesAPI,
         movieDao: MovieDao,
         networkUtil: NetworkUtil,
-        remoteKeyDao: RemoteKeyDao
+        remoteKeyDao: RemoteKeyDao,
+        latestMovieDao: LatestMovieDao
     ): IMoviesRepository = MoviesRepository(
 //        remoteDataSource = remoteDataSource,
 //        localDataSource = localDataSource,
         api,
         movieDao,
         networkUtil,
+        latestMovieDao,
         remoteKeyDao
     )
 
@@ -56,6 +57,13 @@ class RepositoryModule {
 //    @Named("Local")
 //    fun provideLocalDataSource(movieDao: MovieDao): MoviesDataSource =
 //        MovieLocalDataSource(movieDao)
+
+
+    @Singleton
+    @Provides
+    fun providesLatestMoviesDao(database: MovieDatabase): LatestMovieDao {
+        return database.latestMovieDao()
+    }
 
     @Singleton
     @Provides

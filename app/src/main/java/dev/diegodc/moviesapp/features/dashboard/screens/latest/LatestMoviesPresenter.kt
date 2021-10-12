@@ -1,18 +1,14 @@
 package dev.diegodc.moviesapp.features.dashboard.screens.latest
 
-import android.util.Log
-import dev.diegodc.moviesapp.core.base.BasePresenter
 import dev.diegodc.moviesapp.core.model.Result
-import dev.diegodc.moviesapp.data.repository.IMoviesRepository
+import dev.diegodc.moviesapp.domain.repository.IMoviesRepository
 import dev.diegodc.moviesapp.features.dashboard.models.MovieView
 import dev.diegodc.moviesapp.features.dashboard.screens.latest.presenter.ILatestMoviesContract
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class LatestMoviesPresenter<V : ILatestMoviesContract.ILatestMoviesView> @Inject constructor(

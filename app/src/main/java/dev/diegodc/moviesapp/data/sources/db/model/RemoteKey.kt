@@ -7,5 +7,11 @@ import androidx.room.PrimaryKey
 data class RemoteKey(
     @PrimaryKey val movieId: Long,
     val prevKey: Int?,
-    val nextKey: Int?
-)
+    val nextKey: Int?,
+    val type: Int // 1 -> popular 2 -> upcoming
+) {
+    companion object {
+        const val TYPE_POPULAR = 1
+        const val TYPE_UPCOMING = 2
+    }
+}

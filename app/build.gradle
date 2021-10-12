@@ -80,6 +80,9 @@ dependencies {
     implementation 'com.google.dagger:hilt-android:2.39.1'
     kapt 'com.google.dagger:hilt-compiler:2.39.1'
 
+    //Mockk
+    implementation 'io.mockk:mockk:1.10.5'
+
     // For instrumentation tests
     androidTestImplementation  'com.google.dagger:hilt-android-testing:2.39.1'
     kaptAndroidTest 'com.google.dagger:hilt-compiler:2.39.1'

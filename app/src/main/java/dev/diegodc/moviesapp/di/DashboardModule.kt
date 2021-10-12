@@ -6,8 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.FragmentComponent
-import dev.diegodc.moviesapp.data.repository.IMoviesRepository
-import dev.diegodc.moviesapp.data.repository.MoviesRepository
+import dev.diegodc.moviesapp.domain.repository.IMoviesRepository
 import dev.diegodc.moviesapp.features.dashboard.DashboardFragment
 import dev.diegodc.moviesapp.features.dashboard.DashboardPresenter
 import dev.diegodc.moviesapp.features.dashboard.contract.IDashboardContract

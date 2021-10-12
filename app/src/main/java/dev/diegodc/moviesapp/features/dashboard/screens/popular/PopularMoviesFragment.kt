@@ -5,9 +5,11 @@ import android.util.Log
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
+import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dev.diegodc.moviesapp.R
 import dev.diegodc.moviesapp.core.base.BaseFragment
+import dev.diegodc.moviesapp.core.util.OnScrollLoadMore
 import dev.diegodc.moviesapp.features.dashboard.adapter.MoviesAdapter
 import dev.diegodc.moviesapp.features.dashboard.models.MovieView
 import dev.diegodc.moviesapp.features.dashboard.screens.popular.presenter.IPopularMoviesContract.IPopularMoviesPresenter
@@ -21,7 +23,6 @@ import kotlinx.coroutines.launch
 class PopularMoviesFragment :
     BaseFragment<IPopularMoviesView, IPopularMoviesPresenter<IPopularMoviesView>>(R.layout.fragment_movies_listed),
     IPopularMoviesView {
-
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
@@ -43,16 +44,27 @@ class PopularMoviesFragment :
                 }
             )
         }
+
+        recyclerView_movies.addOnScrollListener(
+            OnScrollLoadMore(recyclerView_movies.layoutManager as GridLayoutManager){
+                Log.d(
+                    "PopularMoviesFragment",
+                    "OnScrollLoadMore: ${(presenter as PopularMoviesPresenter).isLoading}"
+                )
+                presenter.loadNextPage()
+            }
+        )
     }
 
-    override fun onMoviesLoaded(movies: PagingData<MovieView>) {
+    override fun onMoviesLoaded(movies: List<MovieView>) {
         launch {
-            Log.d("MoviesApp", "onMoviesLoaded")
+            Log.d("PopularMoviesFragment", "onMoviesLoaded")
             (recyclerView_movies.adapter as? MoviesAdapter)?.apply {
-                submitData(movies)
+                val currentIndex = data.size
+                data.addAll(movies)
+                notifyItemRangeInserted(currentIndex, movies.size)
             }
         }
-
     }
 
 }

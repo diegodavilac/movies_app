@@ -13,8 +13,9 @@ import kotlin.coroutines.CoroutineContext
 interface IPopularMoviesContract {
     abstract class IPopularMoviesPresenter<V : IPopularMoviesView> : BasePresenter<V>(){
         abstract fun loadMovies()
+        abstract fun loadNextPage()
     }
     interface IPopularMoviesView : IView{
-        fun onMoviesLoaded(movies: PagingData<MovieView>)
+        fun onMoviesLoaded(movies: List<MovieView>)
     }
 }

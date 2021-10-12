@@ -2,21 +2,19 @@ package dev.diegodc.moviesapp.features.dashboard.screens.upcoming
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.navigation.fragment.findNavController
-import androidx.paging.PagingData
+import androidx.recyclerview.widget.GridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dev.diegodc.moviesapp.R
 import dev.diegodc.moviesapp.core.base.BaseFragment
+import dev.diegodc.moviesapp.core.util.OnScrollLoadMore
 import dev.diegodc.moviesapp.features.dashboard.adapter.MoviesAdapter
 import dev.diegodc.moviesapp.features.dashboard.models.MovieView
 import dev.diegodc.moviesapp.features.dashboard.screens.upcoming.presenter.IUpcomingMoviesContract.IUpcomingMoviesPresenter
 import dev.diegodc.moviesapp.features.dashboard.screens.upcoming.presenter.IUpcomingMoviesContract.IUpcomingMoviesView
 import dev.diegodc.moviesapp.features.movieDetail.MovieDetailFragment
 import kotlinx.android.synthetic.main.fragment_movies_listed.*
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class UpcomingMoviesFragment :
@@ -43,13 +41,21 @@ class UpcomingMoviesFragment :
                 }
             )
         }
+
+        recyclerView_movies.addOnScrollListener(
+            OnScrollLoadMore(recyclerView_movies.layoutManager as GridLayoutManager){
+                presenter.loadNextPage()
+            }
+        )
     }
 
-    override fun onMoviesLoaded(movies: PagingData<MovieView>) {
+    override fun onMoviesLoaded(movies: List<MovieView>) {
         launch {
             Log.d("MoviesApp", "onMoviesLoaded")
             (recyclerView_movies.adapter as MoviesAdapter).apply {
-                submitData(movies)
+                val currentIndex = data.size
+                data.addAll(movies)
+                notifyItemRangeInserted(currentIndex, movies.size)
             }
         }
 

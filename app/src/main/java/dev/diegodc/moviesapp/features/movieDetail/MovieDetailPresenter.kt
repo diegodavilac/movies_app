@@ -1,10 +1,8 @@
 package dev.diegodc.moviesapp.features.movieDetail
 
-import dev.diegodc.moviesapp.core.base.BasePresenter
-import dev.diegodc.moviesapp.data.repository.IMoviesRepository
+import dev.diegodc.moviesapp.domain.repository.IMoviesRepository
 import dev.diegodc.moviesapp.features.movieDetail.contract.IMovieDetailContract
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import dev.diegodc.moviesapp.core.model.Result
 import dev.diegodc.moviesapp.features.movieDetail.model.MovieDetailedView
