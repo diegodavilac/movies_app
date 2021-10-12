@@ -14,27 +14,25 @@ import javax.inject.Inject
 
 class MovieDetailPresenter<V : IMovieDetailContract.IMovieDetailView> @Inject constructor(
     private val repository: IMoviesRepository
-) : BasePresenter<V>(), IMovieDetailContract.IMovieDetailPresenter<V> {
+) : IMovieDetailContract.IMovieDetailPresenter<V>() {
 
     override fun loadMovieDetails(id: Long) {
-        GlobalScope.launch(Dispatchers.IO) {
+        launch(Dispatchers.IO) {
             repository
                 .getDetails(id)
                 .flowOn(Dispatchers.IO)
                 .collect { result ->
                     when (result) {
                         is Result.Success -> {
-                            GlobalScope.launch(Dispatchers.Main) {
-                                mView?.hideLoading()
-                                (mView as? IMovieDetailContract.IMovieDetailView)?.onMovieDetailLoaded(
-                                    result.data.let {
-                                        MovieDetailedView(
-                                            title = it.title,
-                                            image = it.poster,
-                                            id = it.id
-                                        )
-                                    })
-                            }
+                            mView?.hideLoading()
+                            (mView as? IMovieDetailContract.IMovieDetailView)?.onMovieDetailLoaded(
+                                result.data.let {
+                                    MovieDetailedView(
+                                        title = it.title,
+                                        image = it.poster,
+                                        id = it.id
+                                    )
+                                })
                         }
                         is Result.Loading -> {
                             mView?.showLoading()

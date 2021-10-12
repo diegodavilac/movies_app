@@ -1,5 +1,6 @@
 package dev.diegodc.moviesapp.core.base
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -7,15 +8,11 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import dev.diegodc.moviesapp.core.ui.hideLoadingDialog
 import dev.diegodc.moviesapp.core.ui.showLoadingDialog
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-abstract class BaseFragment<V: IView, P: IPresenter<V>>(@LayoutRes view : Int) : Fragment(view), IView{
-
-    private val job = Job()
-    override val coroutineContext: CoroutineContext = job + Dispatchers.Main
+abstract class BaseFragment<V: IView, P: BasePresenter<V>>(@LayoutRes view : Int) : Fragment(view), CoroutineScope by MainScope(), IView{
 
     abstract fun initViews()
 
@@ -28,26 +25,42 @@ abstract class BaseFragment<V: IView, P: IPresenter<V>>(@LayoutRes view : Int) :
         initViews()
     }
 
-    override fun onDestroyView() {
+    override fun onStart() {
+        super.onStart()
+        if (!presenter.isPresenterAttached()) {
+            presenter.onAttach(this@BaseFragment as V)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
         presenter.onDetach()
-        job.cancel()
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onDestroyView() {
+        if (presenter.isPresenterAttached()) {
+            presenter.onDetach()
+        }
         super.onDestroyView()
     }
 
     override fun showLoading() {
-        showLoadingDialog()
+        launch {
+            showLoadingDialog()
+        }
     }
 
     override fun hideLoading() {
-        hideLoadingDialog()
+        launch {
+            hideLoadingDialog()
+        }
     }
 
     override fun isNetworkConnected(): Boolean {
-        Log.d("MoviesApp", "isNetworkConnected")
         return true
     }
 
     override fun showErrorMessage(message: String) {
-        TODO("Not yet implemented")
+
     }
 }

@@ -18,13 +18,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PopularMoviesFragment : BaseFragment<IPopularMoviesView, IPopularMoviesPresenter<IPopularMoviesView>>(R.layout.fragment_movies_listed),
+class PopularMoviesFragment :
+    BaseFragment<IPopularMoviesView, IPopularMoviesPresenter<IPopularMoviesView>>(R.layout.fragment_movies_listed),
     IPopularMoviesView {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if (isVisible) presenter.loadMovies()
-    }
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
@@ -34,28 +31,28 @@ class PopularMoviesFragment : BaseFragment<IPopularMoviesView, IPopularMoviesPre
         }
     }
 
-     override fun initViews() {
+    override fun initViews() {
+        if (isVisible) presenter.loadMovies()
+
         recyclerView_movies.adapter = MoviesAdapter() { movie ->
             //Navigate to movie's detail
             findNavController().navigate(
                 R.id.action_dashboardFragment_to_movieDetailFragment,
-                    Bundle().apply {
-                        putLong(MovieDetailFragment.MOVIE_ID_ARG, movie.id)
-                    }
-                )
+                Bundle().apply {
+                    putLong(MovieDetailFragment.MOVIE_ID_ARG, movie.id)
+                }
+            )
         }
     }
 
     override fun onMoviesLoaded(movies: PagingData<MovieView>) {
-        Log.d("MoviesApp", "onMoviesLoaded")
-        (recyclerView_movies.adapter as? MoviesAdapter)?.apply {
-            launch {
+        launch {
+            Log.d("MoviesApp", "onMoviesLoaded")
+            (recyclerView_movies.adapter as? MoviesAdapter)?.apply {
                 submitData(movies)
             }
         }
-    }
-
-    override fun showErrorMessage(message: String) {
 
     }
+
 }

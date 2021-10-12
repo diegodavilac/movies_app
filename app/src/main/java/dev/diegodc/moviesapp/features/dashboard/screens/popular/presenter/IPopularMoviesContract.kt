@@ -11,15 +11,7 @@ import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
 interface IPopularMoviesContract {
-    abstract class IPopularMoviesPresenter<V : IPopularMoviesView> : BasePresenter<V>(), CoroutineScope{
-        private val job = Job()
-        override val coroutineContext: CoroutineContext = job + Dispatchers.IO
-
-        override fun onDetach() {
-            job.cancel()
-            super.onDetach()
-        }
-
+    abstract class IPopularMoviesPresenter<V : IPopularMoviesView> : BasePresenter<V>(){
         abstract fun loadMovies()
     }
     interface IPopularMoviesView : IView{

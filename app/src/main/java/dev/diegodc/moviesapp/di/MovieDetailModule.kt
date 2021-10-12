@@ -22,6 +22,6 @@ class MovieDetailModule {
     fun provideMovieDetailPresenter(
         repository: IMoviesRepository
     ): IMovieDetailContract.IMovieDetailPresenter<IMovieDetailContract.IMovieDetailView> {
-        return MovieDetailPresenter(repository)
+        return MovieDetailPresenter<IMovieDetailContract.IMovieDetailView>(repository)
     }
 }

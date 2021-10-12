@@ -23,11 +23,6 @@ class UpcomingMoviesFragment :
     BaseFragment<IUpcomingMoviesView, IUpcomingMoviesPresenter<IUpcomingMoviesView>>(R.layout.fragment_movies_listed),
     IUpcomingMoviesView {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if (isVisible) presenter.loadMovies()
-    }
-
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         //Load movies when it is visible
@@ -37,6 +32,8 @@ class UpcomingMoviesFragment :
     }
 
     override fun initViews() {
+        if (isVisible) presenter.loadMovies()
+
         recyclerView_movies.adapter = MoviesAdapter() { movie ->
             //Navigate to movie's detail
             findNavController().navigate(
@@ -49,15 +46,13 @@ class UpcomingMoviesFragment :
     }
 
     override fun onMoviesLoaded(movies: PagingData<MovieView>) {
-        Log.d("MoviesApp", "onMoviesLoaded")
-        (recyclerView_movies.adapter as MoviesAdapter).apply {
-            launch {
+        launch {
+            Log.d("MoviesApp", "onMoviesLoaded")
+            (recyclerView_movies.adapter as MoviesAdapter).apply {
                 submitData(movies)
             }
         }
-    }
-
-    override fun showErrorMessage(message: String) {
 
     }
+
 }
