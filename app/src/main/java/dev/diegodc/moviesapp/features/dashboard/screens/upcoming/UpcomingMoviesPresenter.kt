@@ -19,7 +19,7 @@ class UpcomingMoviesPresenter<V : IUpcomingMoviesContract.IUpcomingMoviesView> @
             moviesRepository.loadUpcomingMovies(
                 page = page,
                 refresh = true
-            ).collectLatest { result ->
+            ).distinctUntilChanged().collectLatest { result ->
                 when (result) {
                     is Result.Loading -> mView?.showLoading()
                     is Result.Success -> {
@@ -47,7 +47,7 @@ class UpcomingMoviesPresenter<V : IUpcomingMoviesContract.IUpcomingMoviesView> @
             moviesRepository.loadUpcomingMovies(
                 page = page + 1,
                 refresh = false
-            ).collectLatest { result ->
+            ).distinctUntilChanged().collectLatest { result ->
                 when (result) {
                     is Result.Loading -> mView?.showLoading()
                     is Result.Success -> {

@@ -28,7 +28,8 @@ class MovieDetailPresenter<V : IMovieDetailContract.IMovieDetailView> @Inject co
                                     MovieDetailedView(
                                         title = it.title,
                                         image = it.poster,
-                                        id = it.id
+                                        id = it.id,
+                                        overview = it.overview
                                     )
                                 })
                         }

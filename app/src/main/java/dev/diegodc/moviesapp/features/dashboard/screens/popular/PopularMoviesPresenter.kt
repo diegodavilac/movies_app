@@ -21,30 +21,31 @@ class PopularMoviesPresenter<V : IPopularMoviesContract.IPopularMoviesView> @Inj
             moviesRepository.loadPopularMovies(
                 page = page,
                 refresh = true
-            ).collectLatest { result ->
-                when (result) {
-                    is Result.Loading -> mView?.showLoading()
-                    is Result.Success -> {
-                        mView?.hideLoading()
-                        Log.d(
-                            "PopularMoviesPresenter",
-                            "Page: $page \n Initial Movie: ${result.data.first().title} \n Last Movie: ${result.data.last().title}"
-                        )
-                        (mView as? IPopularMoviesContract.IPopularMoviesView)?.onMoviesLoaded(
-                            result.data.map {
-                                MovieView(
-                                    it.id,
-                                    it.title,
-                                    it.poster_path ?: "",
-                                    it.popularity
-                                )
-                            }
-                        )
+            ).distinctUntilChanged()
+                .collectLatest { result ->
+                    when (result) {
+                        is Result.Loading -> mView?.showLoading()
+                        is Result.Success -> {
+                            mView?.hideLoading()
+                            Log.d(
+                                "PopularMoviesPresenter",
+                                "Page: $page \n Initial Movie: ${result.data.first().title} \n Last Movie: ${result.data.last().title}"
+                            )
+                            (mView as? IPopularMoviesContract.IPopularMoviesView)?.onMoviesLoaded(
+                                result.data.map {
+                                    MovieView(
+                                        it.id,
+                                        it.title,
+                                        it.poster_path ?: "",
+                                        it.popularity
+                                    )
+                                }
+                            )
+                        }
+                        is Result.Error -> handleError(result.exception)
                     }
-                    is Result.Error -> handleError(result.exception)
-                }
 
-            }
+                }
         }
     }
 
@@ -54,7 +55,8 @@ class PopularMoviesPresenter<V : IPopularMoviesContract.IPopularMoviesView> @Inj
                 moviesRepository.loadPopularMovies(
                     page = page + 1,
                     refresh = false
-                ).collectLatest { result ->
+                ).distinctUntilChanged()
+                    .collectLatest { result ->
                         when (result) {
                             is Result.Loading -> {
                                 isLoading = true
@@ -63,10 +65,7 @@ class PopularMoviesPresenter<V : IPopularMoviesContract.IPopularMoviesView> @Inj
                             is Result.Success -> {
                                 isLoading = false
                                 mView?.hideLoading()
-                                Log.d(
-                                    "PopularMoviesPresenter",
-                                    "Page: ${page + 1} \n Initial Movie: ${result.data.first().title} \n Last Movie: ${result.data.last().title}"
-                                )
+
                                 (mView as? IPopularMoviesContract.IPopularMoviesView)?.onMoviesLoaded(
                                     result.data.map {
                                         MovieView(
@@ -77,7 +76,13 @@ class PopularMoviesPresenter<V : IPopularMoviesContract.IPopularMoviesView> @Inj
                                         )
                                     }
                                 )
-                                if (result.data.isNotEmpty()) page ++
+                                if (result.data.isNotEmpty()) {
+                                    Log.d(
+                                        "PopularMoviesPresenter",
+                                        "Page: ${page + 1} \n Initial Movie: ${result.data.first().title} \n Last Movie: ${result.data.last().title}"
+                                    )
+                                    page++
+                                }
                             }
                             is Result.Error -> {
                                 isLoading = false
